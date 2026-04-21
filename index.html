@@ -657,12 +657,16 @@ let subjects = JSON.parse(localStorage.getItem('gt_subjects') || 'null') || [
   { id: 'chemistry', name: 'Chemistry', color: '#4a9e6b' }
 ];
 let tests = JSON.parse(localStorage.getItem('gt_tests') || '[]');
+let topicMeta = JSON.parse(localStorage.getItem('gt_topicMeta') || '{}');
 let tempSubjects = [];
 let activeTab = 'overview';
+
+
 
 function save() {
   localStorage.setItem('gt_subjects', JSON.stringify(subjects));
   localStorage.setItem('gt_tests', JSON.stringify(tests));
+  localStorage.setItem('gt_topicMeta', JSON.stringify(topicMeta));
 }
 
 // ──────────────────────────────────────────────
@@ -1110,6 +1114,14 @@ function submitTest() {
     : new Date().toLocaleDateString('en-GB');
 
   tests.push({ id: Date.now(), subject, topic, score, max, date: dateStr });
+  const key = subject + '::' + topic.toLowerCase().trim();
+
+if (!topicMeta[key]) topicMeta[key] = { progress: 0, done: false };
+
+const progVal = parseFloat(document.getElementById('m-progress')?.value);
+if (!isNaN(progVal)) topicMeta[key].progress = Math.max(0, Math.min(100, progVal));
+
+topicMeta[key].done = document.getElementById('m-done')?.checked || false;
   save();
   
 // keep modal open
