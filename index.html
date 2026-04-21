@@ -6,6 +6,9 @@
 <title>Grade Tracker</title>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
+  td[onclick]:hover {
+  opacity: 0.7;
+}
 :root {
   --bg: #f5f2eb;
   --surface: #ffffff;
@@ -940,7 +943,10 @@ function renderTopics() {
       const trendArrow = t.trend === 'up' ? '<span class="c-good">↑</span>' : t.trend === 'down' ? '<span class="c-bad">↓</span>' : '<span style="color:var(--muted)">→</span>';
       return `
         <tr>
-          <td style="color:var(--text);font-weight:500">${t.topic}</td>
+          <td style="color:var(--text);font-weight:500;cursor:pointer;text-decoration:underline;"
+    onclick="quickAddFromTopic('${t.subject}', '${t.topic.replace(/'/g, "\\'")}')">
+  ${t.topic}
+</td>
           <td>${t.count} test${t.count>1?'s':''}</td>
           <td>${t.total}/${t.max}</td>
           <td class="${pctClass(t.pct)}" style="font-weight:600">${t.pct}%</td>
@@ -1133,6 +1139,18 @@ function deleteTest(id) {
   tests = tests.filter(t => t.id !== id);
   save();
   render();
+}
+function quickAddFromTopic(subjectId, topicName) {
+  openAddTest();
+
+  // wait for modal to render properly
+  setTimeout(() => {
+    document.getElementById('m-subject').value = subjectId;
+    document.getElementById('m-topic').value = topicName;
+
+    // focus score field for fast input
+    document.getElementById('m-score').focus();
+  }, 50);
 }
 const sorted = [...tests].sort((a, b) => b.id - a.id);
 document.addEventListener('keydown', e => {
