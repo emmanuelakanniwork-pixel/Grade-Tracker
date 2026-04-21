@@ -1105,8 +1105,14 @@ function submitTest() {
 
   tests.push({ id: Date.now(), subject, topic, score, max, date: dateStr });
   save();
-  closeAddTest();
-  render();
+  tests.push({ id: Date.now(), subject, topic, score, max, date: dateStr });
+save();
+
+// clear inputs for next entry
+document.getElementById('m-topic').value = '';
+document.getElementById('m-score').value = '';
+document.getElementById('m-max').value = '';
+document.getElementById('live-pct-preview').textContent = '';
 }
 
 // ──────────────────────────────────────────────
