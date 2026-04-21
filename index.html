@@ -1105,8 +1105,9 @@ function submitTest() {
 
   tests.push({ id: Date.now(), subject, topic, score, max, date: dateStr });
   save();
-  tests.push({ id: Date.now(), subject, topic, score, max, date: dateStr });
-save();
+  
+// keep modal open
+document.getElementById('add-overlay').classList.add('open');
 
 // clear inputs for next entry
 document.getElementById('m-topic').value = '';
